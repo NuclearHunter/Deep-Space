@@ -4,7 +4,11 @@ namespace DeepSpace
 {
     public class PlayerState
     {
-        public float healthPoint;
+        public int healthPoint;
+        public int energy;
+
+        public float maxSpeed;
+
         public Vector2 position;
     }
 }

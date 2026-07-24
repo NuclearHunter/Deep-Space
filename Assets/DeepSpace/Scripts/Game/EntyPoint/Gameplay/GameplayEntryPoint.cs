@@ -13,9 +13,12 @@ namespace DeepSpace
                 new PlayerPrefsGameStateProvider());
             
             var gameStateProvider = _serviceLocator.GetService<IGameStateProvider>();
-            var gameModel = gameStateProvider.LoadGameModel();
-            
-            _serviceLocator.RegisterService<IPlayerViewModel>(factory => new PlayerViewModel(gameModel.Player));
+            gameStateProvider.LoadGameModel();
+
+
+            _serviceLocator.RegisterSingletonService<PlayerService>(factory => new PlayerService(factory.GetService<IGameStateProvider>()));
+            _serviceLocator.RegisterService<IPlayerViewModel>(factory => new PlayerViewModel(factory.GetService<IGameStateProvider>(), 
+                factory.GetService<PlayerService>()));
 
             var playerViewPrefab = Resources.Load<PlayerView>(GlobalConstants.PREFAB_PLAYER_VIEW);
             var playerView = Instantiate(playerViewPrefab);
@@ -32,7 +35,7 @@ namespace DeepSpace
 
         private void OnDestroy()
         {
-            _serviceLocator.Dispose();
+            _serviceLocator?.Dispose();
         }
     }
 }

@@ -14,6 +14,9 @@
             var gameState = new GameState()
             {
                 player = new PlayerState()
+                {
+                    maxSpeed = 10
+                }
             };
             
             GameModel = new GameModel(gameState);

@@ -5,12 +5,16 @@ namespace DeepSpace
     public class PlayerViewModel : BaseViewModel, IPlayerViewModel
     {
         public ReactiveProperty<Vector2> Position => _playerModel.Position;
+        public ReactiveProperty<float> Rotation => _playerModel.Rotation;
+        public ReactiveProperty<float> Speed => _playerModel.Speed;
         
         private readonly PlayerModel _playerModel;
+        private readonly PlayerService _playerService;
         
-        public PlayerViewModel(PlayerModel playerModel)
+        public PlayerViewModel(IGameStateProvider gameStateProvider, PlayerService playerService)
         {
-            _playerModel = playerModel;
+            _playerModel = gameStateProvider.GameModel.Player;
+            _playerService = playerService;
         }
 
         public void Dispose()
@@ -20,8 +24,8 @@ namespace DeepSpace
         
         public override void PhysicsUpdate(float deltaTime)
         {
-            var direction = new Vector2(1, 0);
-            _playerModel.Position.Value += direction * deltaTime * 5f;
+           _playerService.Move(_playerModel.LastDirection, deltaTime);
+           _playerService.Roration(ModRotation.Right, deltaTime);
         }
     }
 }
